@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment — never commit secrets
+.env
+**/.env
+
+# Local user store — contains email + bcrypt hash
+backend/users.json
+
+# Build output
+portal/dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Zip artifacts
+*.zip
+files (12)/
+files (12).zip

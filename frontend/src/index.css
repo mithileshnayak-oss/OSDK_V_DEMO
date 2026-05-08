@@ -1,0 +1,139 @@
+/* gwaithlabs design system tokens */
+:root {
+  --black: #070707;
+  --off: #0e0e0e;
+  --ch: #191919;
+  --gd: #282828;
+  --gm: #525252;
+  --gl: #858585;
+  --gp: #cac8c0;
+  --white: #f0ede6;
+  --copper: #b87333;
+  --cl: #d48940;
+  --burnt: #c04800;
+  --amber: #f0b429;
+  --adim: rgba(240, 180, 41, 0.11);
+  --aborder: rgba(240, 180, 41, 0.28);
+  --violet: #9d7de8;
+  --vdim: rgba(157, 125, 232, 0.1);
+  --vborder: rgba(157, 125, 232, 0.26);
+  --success: #27ae60;
+  --warning: #e67e22;
+  --danger: #e74c3c;
+
+  --card-bg: rgba(255, 255, 255, 0.03);
+  --card-border: rgba(255, 255, 255, 0.07);
+  --card-hover-border: rgba(184, 115, 51, 0.35);
+
+  --sidebar-width: 220px;
+  --sidebar-collapsed: 60px;
+
+  --nav-active-bg: rgba(184, 115, 51, 0.15);
+  --nav-active-text: #b87333;
+}
+
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'DM Mono', monospace;
+  line-height: 1.6;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Grain noise overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--off);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gd);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gm);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5 {
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.display {
+  font-family: 'Bebas Neue', cursive;
+  letter-spacing: 0.05em;
+}
+
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+a {
+  color: var(--copper);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--cl);
+}
+
+button {
+  cursor: pointer;
+  font-family: 'DM Mono', monospace;
+}
+
+input, textarea, select {
+  font-family: 'DM Mono', monospace;
+}
+
+/* Loading shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--ch) 25%, var(--gd) 50%, var(--ch) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+/* Utility classes */
+.copper { color: var(--copper); }
+.amber { color: var(--amber); }
+.violet { color: var(--violet); }
+.muted { color: var(--gl); }
+.small { font-size: 0.85em; }

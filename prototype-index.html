@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vanyar — Training &amp; Hackathon Platform</title>
+<meta name="description" content="Vanyar is a training and hackathon platform built natively on Palantir Foundry. Train internal teams, run ecosystem hackathons, and track real competency — all on the same infrastructure.">
+<style>
+@font-face{font-family:'Bebas Neue';font-style:normal;font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/npm/@fontsource/bebas-neue@5/files/bebas-neue-latin-400-normal.woff2') format('woff2')}
+@font-face{font-family:'DM Mono';font-style:normal;font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/npm/@fontsource/dm-mono@5/files/dm-mono-latin-400-normal.woff2') format('woff2')}
+@font-face{font-family:'DM Mono';font-style:italic;font-weight:300;font-display:swap;src:url('https://cdn.jsdelivr.net/npm/@fontsource/dm-mono@5/files/dm-mono-latin-300-italic.woff2') format('woff2')}
+@font-face{font-family:'DM Mono';font-style:italic;font-weight:500;font-display:swap;src:url('https://cdn.jsdelivr.net/npm/@fontsource/dm-mono@5/files/dm-mono-latin-500-italic.woff2') format('woff2')}
+@font-face{font-family:'DM Mono';font-style:normal;font-weight:500;font-display:swap;src:url('https://cdn.jsdelivr.net/npm/@fontsource/dm-mono@5/files/dm-mono-latin-500-normal.woff2') format('woff2')}
+@font-face{font-family:'Instrument Serif';font-style:normal;font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/npm/@fontsource/instrument-serif@5/files/instrument-serif-latin-400-normal.woff2') format('woff2')}
+@font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/npm/@fontsource/instrument-serif@5/files/instrument-serif-latin-400-italic.woff2') format('woff2')}
+@font-face{font-family:'Syne';font-style:normal;font-weight:700;font-display:swap;src:url('https://cdn.jsdelivr.net/npm/@fontsource/syne@5/files/syne-latin-700-normal.woff2') format('woff2')}
+@font-face{font-family:'Syne';font-style:normal;font-weight:800;font-display:swap;src:url('https://cdn.jsdelivr.net/npm/@fontsource/syne@5/files/syne-latin-800-normal.woff2') format('woff2')}
+
+:root{
+--black:#070707;--off:#0e0e0e;--ch:#191919;--gd:#282828;--gm:#525252;
+--gl:#858585;--gp:#cac8c0;--white:#f0ede6;
+--copper:#b87333;--cl:#d48940;--burnt:#c04800;
+--amber:#f0b429;--adim:rgba(240,180,41,.11);--aborder:rgba(240,180,41,.28);
+--violet:#9d7de8;--vdim:rgba(157,125,232,.1);--vborder:rgba(157,125,232,.26);
+--nav:68px;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--black);color:var(--white);font-family:'DM Mono',monospace;font-weight:400;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.028;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+
+.container{max-width:1240px;margin:0 auto;padding:0 52px}
+
+.label{display:flex;align-items:center;gap:16px;font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--copper)}
+.label::before{content:'';display:block;width:32px;height:1px;background:var(--copper)}
+.label.amber{color:var(--amber)}
+.label.amber::before{background:var(--amber)}
+.label.violet{color:var(--violet)}
+.label.violet::before{background:var(--violet)}
+.label.gp{color:var(--gp)}
+.label.gp::before{background:var(--gp)}
+
+.display{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,7.5vw,112px);line-height:.9;color:var(--white)}
+.display .copper{color:var(--copper)}
+.display .amber{color:var(--amber)}
+.display .violet{color:var(--violet)}
+.display .dim{color:var(--gm);font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(44px,6vw,96px);line-height:.9}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;padding:13px 28px;border:1px solid;transition:all .2s ease;cursor:pointer;white-space:nowrap}
+.btn-white{border-color:var(--white);color:var(--black);background:var(--white)}
+.btn-white:hover{background:var(--gp);border-color:var(--gp)}
+.btn-ghost{border-color:rgba(240,237,230,.2);color:var(--white);background:transparent}
+.btn-ghost:hover{border-color:var(--white);background:rgba(240,237,230,.05)}
+.btn-amber{border-color:var(--amber);color:var(--amber);background:transparent}
+.btn-amber:hover{background:var(--adim)}
+.btn-copper{border-color:var(--copper);color:var(--copper);background:transparent}
+.btn-copper:hover{background:rgba(184,115,51,.1)}
+.btn-violet{border-color:var(--violet);color:var(--violet);background:transparent}
+.btn-violet:hover{background:var(--vdim)}
+.btn-fill-copper{border-color:var(--copper);color:var(--black);background:var(--copper)}
+.btn-fill-copper:hover{background:var(--cl);border-color:var(--cl)}
+
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+hr.rule{border:none;height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.07),transparent);margin:0}
+
+.cursor{display:inline-block;width:2px;height:1em;background:var(--amber);vertical-align:middle;animation:blink 1.1s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+.section{padding:120px 0}
+.section-sm{padding:80px 0}
+
+nav{position:fixed;top:0;left:0;right:0;height:var(--nav);z-index:8000;background:rgba(7,7,7,.92);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.04);transition:border-color .3s}
+nav.scrolled{border-bottom-color:rgba(255,255,255,.08)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:100%;max-width:1240px;margin:0 auto;padding:0 52px}
+.nav-logo{display:flex;align-items:center;gap:12px;font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:.04em;color:var(--white)}
+.nav-links{display:flex;align-items:center;gap:40px}
+.nav-links a{font-family:'DM Mono',monospace;font-size:11px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:var(--gl);transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+.nav-cta{display:flex;align-items:center;gap:16px}
+.hamburger{display:none;flex-direction:column;gap:5px;padding:8px;cursor:pointer}
+.hamburger span{display:block;width:22px;height:1px;background:var(--white);transition:all .3s}
+.mobile-menu{position:fixed;top:var(--nav);left:0;right:0;bottom:0;background:rgba(7,7,7,.98);z-index:7900;display:flex;flex-direction:column;padding:48px 32px;gap:32px;transform:translateX(100%);transition:transform .3s ease}
+.mobile-menu.open{transform:translateX(0)}
+.mobile-menu a{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;color:var(--white);letter-spacing:.04em;border-bottom:1px solid rgba(255,255,255,.07);padding-bottom:24px}
+
+#hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding-top:var(--nav)}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(184,115,51,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(184,115,51,.06) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%)}
+.hero-orb-1{position:absolute;top:-10%;left:-5%;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(184,115,51,.12) 0%,transparent 70%);pointer-events:none}
+.hero-orb-2{position:absolute;bottom:-5%;right:10%;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(240,180,41,.07) 0%,transparent 70%);pointer-events:none}
+.hero-accent-line{position:absolute;top:0;left:50%;width:1px;height:100%;background:linear-gradient(to bottom,transparent,rgba(184,115,51,.15),transparent)}
+.hero-content{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;padding:80px 0}
+.hero-left .flag{font-family:'DM Mono',monospace;font-size:11px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:var(--gm);margin-bottom:24px}
+.hero-right{display:flex;flex-direction:column;gap:28px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid rgba(184,115,51,.3);background:rgba(184,115,51,.06);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--copper);align-self:flex-start}
+.hero-tagline{font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(22px,2.5vw,32px);color:var(--gp);line-height:1.3}
+.hero-desc{font-size:13px;color:var(--gl);line-height:1.8}
+.hero-ctas{display:flex;gap:16px;flex-wrap:wrap}
+.scroll-indicator{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:1}
+.scroll-line{width:1px;height:60px;background:linear-gradient(to bottom,var(--copper),transparent)}
+.scroll-text{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gm)}
+
+#v-stats{padding:0;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05)}
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr)}
+.stat-block{padding:40px 48px;border-right:1px solid rgba(255,255,255,.05);position:relative;overflow:hidden}
+.stat-block:last-child{border-right:none}
+.stat-block::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(184,115,51,.03),transparent);pointer-events:none}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:52px;line-height:1;color:var(--white);display:block}
+.stat-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gm);margin-top:6px;display:block}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:.8}}
+.stat-pulse{animation:pulse 1.8s ease infinite;color:var(--gm) !important}
+
+.ticker-wrap{overflow:hidden;background:var(--ch);border-top:1px solid rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.04);padding:14px 0}
+.ticker-track{display:flex;white-space:nowrap;animation:ticker 40s linear infinite}
+.ticker-item{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.12em;color:var(--gm);padding:0 28px;display:inline-flex;align-items:center;gap:28px}
+.ticker-item::after{content:'/';color:var(--copper);opacity:.5}
+.ticker-item.hi{color:var(--copper)}
+
+#v-pillars{padding:120px 0}
+.pillars-header{margin-bottom:72px}
+.pillars-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:48px}
+.pillar-card{background:var(--off);padding:56px 48px;position:relative;overflow:hidden;border-top:3px solid transparent;transition:all .3s}
+.pillar-card.copper{border-top-color:var(--copper)}
+.pillar-card.amber{border-top-color:var(--amber)}
+.pillar-ghost{position:absolute;top:-20px;right:32px;font-family:'Bebas Neue',sans-serif;font-size:180px;line-height:1;pointer-events:none;user-select:none}
+.pillar-card.copper .pillar-ghost{color:rgba(184,115,51,.07)}
+.pillar-card.amber .pillar-ghost{color:rgba(240,180,41,.07)}
+.pillar-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px}
+.pillar-card.copper .pillar-title{color:var(--copper)}
+.pillar-card.amber .pillar-title{color:var(--amber)}
+.pillar-sub{font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;color:var(--gp);margin-bottom:28px}
+.pillar-list li{font-size:12px;color:var(--gl);line-height:2;padding-left:16px;position:relative}
+.pillar-list li::before{content:'—';position:absolute;left:0;color:var(--gm)}
+.pillars-footer{padding:28px 36px;background:var(--ch);border-left:3px solid var(--gd);font-size:12px;color:var(--gm);line-height:1.7}
+
+#v-audiences{padding:120px 0;background:var(--off)}
+.audiences-header{margin-bottom:72px}
+.audiences-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.audience-card{background:var(--black);padding:48px 36px;border-top:3px solid transparent;transition:all .3s;cursor:default}
+.audience-card:hover{background:var(--ch)}
+.audience-card.copper{border-top-color:var(--copper)}
+.audience-card.amber{border-top-color:var(--amber)}
+.audience-card.violet{border-top-color:var(--violet)}
+.audience-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:12px}
+.audience-card.copper .audience-name{color:var(--copper)}
+.audience-card.amber .audience-name{color:var(--amber)}
+.audience-card.violet .audience-name{color:var(--violet)}
+.audience-desc{font-size:12px;color:var(--gm);line-height:1.8;margin-bottom:28px}
+.audience-uses li{font-size:11px;color:var(--gl);line-height:2.1;padding-left:14px;position:relative}
+.audience-uses li::before{content:'+';position:absolute;left:0;color:var(--gm)}
+
+#v-roles{padding:120px 0}
+.roles-header{margin-bottom:72px}
+.roles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+.role-card{background:var(--off);padding:40px 32px;border-left:2px solid transparent;transition:all .3s;cursor:default}
+.role-card:hover{background:var(--gd);border-left-color:var(--copper)}
+.role-card.amber:hover{border-left-color:var(--amber)}
+.role-card.violet:hover{border-left-color:var(--violet)}
+.role-card.gp:hover{border-left-color:var(--gp)}
+.role-icon{font-size:24px;margin-bottom:20px;display:block}
+.role-card.copper .role-icon{color:var(--copper)}
+.role-card.amber .role-icon{color:var(--amber)}
+.role-card.violet .role-icon{color:var(--violet)}
+.role-card.gp .role-icon{color:var(--gp)}
+.role-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;letter-spacing:.08em;margin-bottom:12px;color:var(--white)}
+.role-desc{font-size:11px;color:var(--gm);line-height:1.8;margin-bottom:20px}
+.role-list li{font-size:11px;color:var(--gl);line-height:2;padding-left:14px;position:relative}
+.role-list li::before{content:'—';position:absolute;left:0;color:var(--gm);font-size:9px}
+.role-portal{margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,.05);font-size:10px;color:var(--gm);letter-spacing:.06em;line-height:1.8}
+
+#v-workflows{padding:120px 0;background:var(--off)}
+.workflows-header{margin-bottom:72px}
+.fw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.fw-node{display:grid;grid-template-columns:52px 1fr;background:var(--black);transition:background .3s}
+.fw-node:hover{background:var(--ch)}
+.fw-num{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--gd);writing-mode:vertical-rl;text-align:center;padding:20px 0;background:var(--off);user-select:none}
+.fw-body{padding:32px 28px}
+.fw-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--copper);margin-bottom:12px}
+.fw-desc{font-size:11px;color:var(--gl);line-height:1.8}
+
+#v-training-portal{padding:120px 0}
+.tp-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.tp-desc{font-size:13px;color:var(--gl);line-height:1.9;margin:28px 0}
+.tp-aside{padding:24px 28px;background:var(--ch);border-left:2px solid var(--copper);margin-top:32px}
+.tp-aside-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--copper);margin-bottom:16px}
+.content-types{display:flex;flex-wrap:wrap;gap:8px}
+.ct-tag{padding:5px 12px;border:1px solid rgba(184,115,51,.25);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--copper)}
+.screen-list{display:flex;flex-direction:column;gap:2px}
+.screen-card{background:var(--off);padding:24px 28px;border-left:2px solid transparent;transition:all .3s;cursor:default}
+.screen-card:hover{background:var(--gd);border-left-color:var(--copper)}
+.screen-card.amber:hover{border-left-color:var(--amber)}
+.screen-card.violet:hover{border-left-color:var(--violet)}
+.screen-badge{display:inline-flex;padding:3px 10px;border:1px solid rgba(184,115,51,.25);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--copper);margin-bottom:10px}
+.screen-badge.amber{border-color:var(--aborder);color:var(--amber)}
+.screen-badge.violet{border-color:var(--vborder);color:var(--violet)}
+.screen-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--white);margin-bottom:6px}
+.screen-desc{font-size:11px;color:var(--gm);line-height:1.7}
+
+#v-event-hub{padding:120px 0;background:var(--off)}
+.eh-header{margin-bottom:72px}
+.challenge-types{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:56px}
+.ct-card{background:var(--black);padding:36px 32px}
+.ct-card-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px}
+.ct-card.anal .ct-card-title{color:var(--amber)}
+.ct-card.nonanal .ct-card-title{color:var(--gp)}
+.ct-card-desc{font-size:11px;color:var(--gl);line-height:1.8}
+.screens-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+
+#v-admin{padding:120px 0}
+.admin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:64px}
+
+#v-live-events{padding:120px 0;background:var(--off)}
+#events-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px}
+.event-card{background:var(--black);padding:32px 28px;border-top:2px solid transparent;transition:all .3s}
+.event-card:hover{background:var(--ch)}
+.event-card.copper{border-top-color:var(--copper)}
+.event-card.amber{border-top-color:var(--amber)}
+.event-status{display:inline-flex;padding:3px 10px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px}
+.event-status.published{border:1px solid rgba(184,115,51,.3);color:var(--copper)}
+.event-status.active{border:1px solid var(--aborder);color:var(--amber)}
+.event-status.completed{border:1px solid rgba(82,82,82,.5);color:var(--gm)}
+.event-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--white);margin-bottom:8px}
+.event-meta{font-size:10px;color:var(--gm);margin-bottom:12px;letter-spacing:.06em}
+.event-desc{font-size:11px;color:var(--gl);line-height:1.7}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel{background:linear-gradient(90deg,var(--ch) 25%,var(--gd) 50%,var(--ch) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+.skel-card{height:180px}
+.state-msg{padding:48px;text-align:center;font-size:12px;color:var(--gm);display:none}
+.state-msg.show{display:block}
+
+#v-live-leaderboard{padding:120px 0}
+.lb-controls{display:flex;align-items:center;gap:16px;margin:48px 0 32px}
+#event-select{background:var(--ch);border:1px solid rgba(255,255,255,.08);color:var(--white);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;padding:10px 16px;outline:none;min-width:280px}
+#event-select option{background:var(--ch)}
+.lb-table-wrap{overflow-x:auto}
+#lb-table{width:100%;border-collapse:collapse}
+#lb-table th{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gm);padding:14px 20px;text-align:left;border-bottom:1px solid rgba(255,255,255,.06)}
+#lb-table td{font-size:12px;color:var(--gl);padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.04)}
+.lb-gold td{color:var(--amber) !important}
+.lb-silver td{color:var(--gp) !important}
+.lb-bronze td{color:var(--copper) !important}
+.lb-rank{font-family:'Bebas Neue',sans-serif;font-size:22px}
+
+#v-live-tracks{padding:120px 0;background:var(--off)}
+#tracks-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px}
+.track-card{background:var(--black);padding:32px 28px;border-top:2px solid transparent;transition:all .3s}
+.track-card:hover{background:var(--ch)}
+.track-card.beginner{border-top-color:var(--copper)}
+.track-card.intermediate{border-top-color:var(--amber)}
+.track-card.advanced{border-top-color:var(--violet)}
+.track-diff{display:inline-flex;padding:3px 10px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px;border:1px solid}
+.track-diff.beginner{border-color:rgba(184,115,51,.3);color:var(--copper)}
+.track-diff.intermediate{border-color:var(--aborder);color:var(--amber)}
+.track-diff.advanced{border-color:var(--vborder);color:var(--violet)}
+.track-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--white);margin-bottom:8px}
+.track-desc{font-size:11px;color:var(--gl);line-height:1.7;margin-bottom:16px}
+.track-meta{display:flex;gap:20px;font-size:10px;color:var(--gm);letter-spacing:.08em}
+
+#v-what{padding:120px 0}
+.what-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.what-copy p{font-size:13px;color:var(--gl);line-height:1.9;margin:28px 0}
+.principle-box{padding:28px 32px;background:var(--ch);border-left:2px solid var(--copper);margin-top:36px}
+.principle-box p{font-family:'Instrument Serif',serif;font-style:italic;font-size:16px;color:var(--gp);line-height:1.6}
+.diff-grid{display:flex;flex-direction:column;gap:2px}
+.diff-row{display:grid;grid-template-columns:1fr 1fr;background:var(--off)}
+.diff-header{padding:16px 20px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+.diff-header.bad{color:var(--gm)}
+.diff-header.good{color:var(--copper)}
+.diff-cell{padding:14px 20px;font-size:11px;line-height:1.7;border-top:1px solid rgba(255,255,255,.04)}
+.diff-cell.bad{color:var(--gm)}
+.diff-cell.bad::before{content:'x  ';color:rgba(192,72,0,.6)}
+.diff-cell.good{color:var(--gl)}
+.diff-cell.good::before{content:'+ ';color:var(--copper)}
+
+#v-statements{padding:80px 0;background:var(--ch)}
+.stmt-list{display:flex;flex-direction:column}
+.stmt{padding:28px 0;border-bottom:1px solid rgba(255,255,255,.05);font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,52px);color:var(--gd);letter-spacing:.04em;cursor:default;transition:color .3s,padding-left .3s}
+.stmt:first-child{border-top:1px solid rgba(255,255,255,.05)}
+.stmt.lit{color:var(--white);padding-left:8px}
+
+#v-ontology{padding:120px 0;background:var(--off)}
+.ont-header{margin-bottom:72px}
+.ont-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-bottom:80px;align-items:start}
+.ont-desc p{font-size:13px;color:var(--gl);line-height:1.9;margin-bottom:20px}
+.ont-meta{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:32px}
+.ont-meta-item{background:var(--black);padding:20px 24px}
+.ont-meta-num{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--white)}
+.ont-meta-lbl{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--gm);margin-top:4px}
+.stack-layers{display:flex;flex-direction:column;gap:2px}
+.stack-layer{padding:20px 28px;background:var(--black)}
+.stack-layer-label{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin-bottom:4px}
+.stack-layer.app .stack-layer-label{color:var(--copper)}
+.stack-layer.logic .stack-layer-label{color:var(--amber)}
+.stack-layer.ontology .stack-layer-label{color:var(--violet)}
+.stack-layer.data .stack-layer-label{color:var(--gl)}
+.stack-layer-desc{font-size:11px;color:var(--gm);line-height:1.7}
+.obj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.obj-card{background:var(--black);padding:24px 22px;border-left:2px solid var(--gd);transition:all .3s}
+.obj-card:hover{border-left-color:var(--copper);background:var(--ch)}
+.obj-icon{font-size:16px;color:var(--gm);margin-bottom:12px;display:block}
+.obj-name{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--white);margin-bottom:6px}
+.obj-pk{font-size:10px;color:var(--copper);letter-spacing:.08em;margin-bottom:8px}
+.obj-props{font-size:10px;color:var(--gm);line-height:1.8}
+
+#v-status{padding:120px 0}
+.status-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-top:64px;align-items:start}
+.status-desc p{font-size:13px;color:var(--gl);line-height:1.9;margin-bottom:20px}
+.status-list{display:flex;flex-direction:column;gap:2px}
+.status-item{display:flex;align-items:flex-start;gap:16px;padding:20px 24px;background:var(--off)}
+.status-badge{font-size:9px;letter-spacing:.16em;text-transform:uppercase;padding:4px 10px;white-space:nowrap;flex-shrink:0;margin-top:1px}
+.status-badge.complete{border:1px solid rgba(184,115,51,.3);color:var(--copper)}
+.status-badge.progress{border:1px solid var(--aborder);color:var(--amber)}
+.status-badge.planned{border:1px solid rgba(82,82,82,.4);color:var(--gm)}
+.status-text{font-size:12px;color:var(--gl);line-height:1.7}
+
+#v-partner{padding:120px 0;background:var(--off)}
+.partner-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;margin-top:64px}
+.partner-desc p{font-size:13px;color:var(--gl);line-height:1.9;margin-bottom:28px}
+.benefit-rows{display:flex;flex-direction:column;gap:2px}
+.benefit-row{display:grid;grid-template-columns:32px 1fr;gap:20px;align-items:start;padding:20px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.benefit-num{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gd)}
+.benefit-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--copper);margin-bottom:6px}
+.benefit-text{font-size:11px;color:var(--gm);line-height:1.7}
+.partner-box{background:var(--black);padding:48px 40px;border-top:3px solid var(--copper)}
+.partner-box-title{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--white);margin-bottom:24px;line-height:1}
+.partner-who{margin-bottom:32px}
+.partner-who-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gm);margin-bottom:14px}
+.partner-who ul{margin-top:0}
+.partner-who li{font-size:12px;color:var(--gl);line-height:2.1;padding-left:14px;position:relative}
+.partner-who li::before{content:'—';position:absolute;left:0;color:var(--gm)}
+.partner-ctas{display:flex;flex-direction:column;gap:10px}
+
+footer{padding:48px 52px;background:var(--black);border-top:1px solid rgba(255,255,255,.06)}
+.footer-inner{display:grid;grid-template-columns:1fr auto 1fr;gap:40px;align-items:start;max-width:1240px;margin:0 auto}
+.footer-brand .wordmark{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--white);margin-bottom:10px}
+.footer-tagline{font-family:'Instrument Serif',serif;font-style:italic;font-size:14px;color:var(--gm);margin-bottom:8px}
+.footer-sub{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gm)}
+.footer-nav{display:flex;flex-direction:column;gap:12px;align-items:center}
+.footer-nav a{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gm);transition:color .2s}
+.footer-nav a:hover{color:var(--white)}
+.footer-right{text-align:right}
+.footer-copy{font-size:10px;color:var(--gm);letter-spacing:.1em;line-height:2}
+
+@media(max-width:900px){
+.container{padding:0 24px}
+.nav-inner{padding:0 24px}
+.nav-links,.nav-cta{display:none}
+.hamburger{display:flex}
+.hero-content{grid-template-columns:1fr;gap:48px;padding:60px 0}
+.stats-bar{grid-template-columns:1fr 1fr}
+.stat-block{border-right:none;border-bottom:1px solid rgba(255,255,255,.05);padding:28px 24px}
+.pillars-grid{grid-template-columns:1fr}
+.audiences-grid{grid-template-columns:1fr}
+.roles-grid{grid-template-columns:1fr 1fr}
+.fw-grid{grid-template-columns:1fr 1fr}
+.tp-grid{grid-template-columns:1fr}
+.challenge-types{grid-template-columns:1fr}
+.screens-grid{grid-template-columns:1fr}
+.admin-grid{grid-template-columns:1fr}
+#events-grid{grid-template-columns:1fr}
+#tracks-grid{grid-template-columns:1fr}
+.what-grid{grid-template-columns:1fr}
+.ont-layout{grid-template-columns:1fr}
+.ont-meta{grid-template-columns:1fr 1fr}
+.obj-grid{grid-template-columns:1fr 1fr}
+.status-layout{grid-template-columns:1fr}
+.partner-layout{grid-template-columns:1fr}
+.footer-inner{grid-template-columns:1fr;gap:32px}
+.footer-right{text-align:left}
+.footer-nav{align-items:flex-start}
+footer{padding:48px 24px}
+}
+@media(max-width:600px){
+.roles-grid{grid-template-columns:1fr}
+.fw-grid{grid-template-columns:1fr}
+.obj-grid{grid-template-columns:1fr}
+.display{font-size:clamp(44px,12vw,80px)}
+}
+</style>
+</head>
+<body>
+
+<nav id="main-nav">
+<div class="nav-inner">
+<a href="#" class="nav-logo">
+<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M14 2L25.26 8.5V21.5L14 28L2.74 21.5V8.5L14 2Z" stroke="#b87333" stroke-width="1.2" fill="none"/>
+<path d="M14 7L14 21M9 10.5L14 7L19 10.5" stroke="#d48940" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="14" cy="21" r="1.5" fill="#b87333"/>
+</svg>
+VANYAR
+</a>
+<div class="nav-links">
+<a href="#v-pillars">Platform</a>
+<a href="#v-roles">Roles</a>
+<a href="#v-event-hub">Events</a>
+<a href="#v-training-portal">Training</a>
+<a href="#v-ontology">Architecture</a>
+<a href="#v-partner">Partners</a>
+</div>
+<div class="nav-cta">
+<a href="#v-partner" class="btn btn-fill-copper">Get Involved</a>
+</div>
+<div class="hamburger" onclick="toggleMenu()" aria-label="Open menu">
+<span></span><span></span><span></span>
+</div>
+</div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+<a href="#v-pillars" onclick="closeMenu()">Platform</a>
+<a href="#v-roles" onclick="closeMenu()">Roles</a>
+<a href="#v-event-hub" onclick="closeMenu()">Events</a>
+<a href="#v-training-portal" onclick="closeMenu()">Training</a>
+<a href="#v-ontology" onclick="closeMenu()">Architecture</a>
+<a href="#v-partner" onclick="closeMenu()">Partners</a>
+<a href="#v-partner" onclick="closeMenu()" class="btn btn-fill-copper" style="align-self:flex-start;margin-top:16px">Get Involved</a>
+</div>
+
+<section id="hero">
+<div class="hero-bg">
+<div class="hero-grid"></div>
+<div class="hero-orb-1"></div>
+<div class="hero-orb-2"></div>
+<div class="hero-accent-line"></div>
+</div>
+<div class="container">
+<div class="hero-content">
+<div class="hero-left reveal">
+<div class="flag">Track 02 — Training &amp; Hackathon Platform</div>
+<div class="display">
+THE PALANTIR<br>
+ECOSYSTEM'S<br>
+TRAINING &amp;<br>
+<span class="copper">HACKATHON<span class="cursor"></span></span>
+</div>
+</div>
+<div class="hero-right reveal" style="transition-delay:.18s">
+<div class="hero-badge">Built natively on Palantir Foundry</div>
+<div class="hero-tagline">Train. Compete. Excel.</div>
+<p class="hero-desc">Vanyar brings structured training programmes and hackathon competitions into a single platform — built on the same Foundry infrastructure your teams already run. Designed for enterprise customers, service partners, and universities navigating the Palantir ecosystem. Two modes. One platform.</p>
+<div class="hero-ctas">
+<a href="#v-pillars" class="btn btn-white">See the platform &rarr;</a>
+<a href="#v-partner" class="btn btn-ghost">Become a design partner</a>
+</div>
+</div>
+</div>
+</div>
+<div class="scroll-indicator">
+<div class="scroll-line"></div>
+<div class="scroll-text">Scroll</div>
+</div>
+</section>
+
+<section id="v-stats">
+<div class="stats-bar">
+<div class="stat-block">
+<span class="stat-num stat-pulse" id="stat-users">—</span>
+<span class="stat-lbl">Enrolled Practitioners</span>
+</div>
+<div class="stat-block">
+<span class="stat-num stat-pulse" id="stat-events">—</span>
+<span class="stat-lbl">Active Events</span>
+</div>
+<div class="stat-block">
+<span class="stat-num stat-pulse" id="stat-tracks">—</span>
+<span class="stat-lbl">Training Tracks</span>
+</div>
+<div class="stat-block">
+<span class="stat-num stat-pulse" id="stat-submissions">—</span>
+<span class="stat-lbl">Submissions</span>
+</div>
+</div>
+</section>
+
+<div class="ticker-wrap">
+<div class="ticker-track">
+<span class="ticker-item hi">VANYAR</span>
+<span class="ticker-item">FOUNDRY NATIVE</span>
+<span class="ticker-item hi">TRAINING PLATFORM</span>
+<span class="ticker-item">HACKATHON ENGINE</span>
+<span class="ticker-item hi">THREE AUDIENCES</span>
+<span class="ticker-item">FOUR ROLES</span>
+<span class="ticker-item hi">LEARNING TRACKS</span>
+<span class="ticker-item">CERTIFICATION ENGINE</span>
+<span class="ticker-item hi">ENTERPRISE READY</span>
+<span class="ticker-item">UNIVERSITY PROGRAMMES</span>
+<span class="ticker-item hi">PALANTIR ECOSYSTEM</span>
+<span class="ticker-item">AIP NATIVE</span>
+<span class="ticker-item hi">VANYAR</span>
+<span class="ticker-item">FOUNDRY NATIVE</span>
+<span class="ticker-item hi">TRAINING PLATFORM</span>
+<span class="ticker-item">HACKATHON ENGINE</span>
+<span class="ticker-item hi">THREE AUDIENCES</span>
+<span class="ticker-item">FOUR ROLES</span>
+<span class="ticker-item hi">LEARNING TRACKS</span>
+<span class="ticker-item">CERTIFICATION ENGINE</span>
+<span class="ticker-item hi">ENTERPRISE READY</span>
+<span class="ticker-item">UNIVERSITY PROGRAMMES</span>
+<span class="ticker-item hi">PALANTIR ECOSYSTEM</span>
+<span class="ticker-item">AIP NATIVE</span>
+</div>
+</div>
+
+<section id="v-pillars" class="section">
+<div class="container">
+<div class="pillars-header reveal">
+<div class="label" style="margin-bottom:24px">Core Platform</div>
+<div class="display">TWO<br>PILLARS.<br>ONE<br>PLATFORM.</div>
+</div>
+<div class="pillars-grid reveal">
+<div class="pillar-card copper">
+<div class="pillar-ghost">T</div>
+<div class="pillar-title">Training Platform</div>
+<div class="pillar-sub">Structured learning, at scale.</div>
+<ul class="pillar-list">
+<li>Tracks &rarr; Modules &rarr; Exercises &rarr; Progress</li>
+<li>Role-based curricula across functions</li>
+<li>Certification endpoints and completion records</li>
+<li>Progress analytics and completion tracking</li>
+<li>Partner and practitioner content contributions</li>
+</ul>
+</div>
+<div class="pillar-card amber">
+<div class="pillar-ghost">H</div>
+<div class="pillar-title">Hackathon Engine</div>
+<div class="pillar-sub">Compete. Build. Win.</div>
+<ul class="pillar-list">
+<li>Events with configurable deadlines and rounds</li>
+<li>Two challenge types: Analytical and Non-analytical</li>
+<li>Team formations and captain assignment</li>
+<li>Submission and scoring workflow end-to-end</li>
+<li>Live leaderboards updated in real time</li>
+</ul>
+</div>
+</div>
+<div class="pillars-footer reveal">
+Both pillars share the same underlying infrastructure: user management, submissions, scoring, leaderboards, and analytics — modelled as a unified Ontology on Palantir Foundry.
+</div>
+</div>
+</section>
+
+<hr class="rule">
+
+<section id="v-audiences" class="section">
+<div class="container">
+<div class="audiences-header reveal">
+<div class="label" style="margin-bottom:24px">Who It's For</div>
+<div class="display">THREE<br>AUDIENCES.<br>ONE<br>ECOSYSTEM.</div>
+</div>
+<div class="audiences-grid reveal">
+<div class="audience-card copper">
+<div class="audience-name">Enterprise Customers</div>
+<p class="audience-desc">Train internal teams on Palantir technologies with structured programmes built on the same infrastructure they already use.</p>
+<ul class="audience-uses">
+<li>Internal training programmes</li>
+<li>Developer enablement at scale</li>
+<li>Technology certification pathways</li>
+<li>Onboarding new FDEs and analysts</li>
+<li>Bench strength analytics in real time</li>
+</ul>
+</div>
+<div class="audience-card amber">
+<div class="audience-name">Service Partners</div>
+<p class="audience-desc">Enable consultants and delivery teams with continuous upskilling, skill assessment, and client-facing hackathon capability.</p>
+<ul class="audience-uses">
+<li>Consultant upskilling programmes</li>
+<li>Internal skill assessment and benchmarking</li>
+<li>Client hackathon delivery</li>
+<li>Team competency benchmarking</li>
+<li>Partner certification management</li>
+</ul>
+</div>
+<div class="audience-card violet">
+<div class="audience-name">Universities &amp; Developers</div>
+<p class="audience-desc">Hackathons, competitions, and talent development pipelines for the next generation entering the Palantir ecosystem.</p>
+<ul class="audience-uses">
+<li>Student hackathons and competitions</li>
+<li>Palantir training programmes</li>
+<li>Recruitment pipelines into the ecosystem</li>
+<li>FuturOps community competitions</li>
+<li>Career pathways into Foundry and AIP</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<hr class="rule">
+
+<section id="v-roles" class="section">
+<div class="container">
+<div class="roles-header reveal">
+<div class="label" style="margin-bottom:24px">User Roles</div>
+<div class="display">FOUR<br>ROLES.<br>ONE<br>WORKFLOW.</div>
+</div>
+<div class="roles-grid reveal">
+<div class="role-card copper">
+<span class="role-icon">&#9672;</span>
+<div class="role-name">Learner / Participant</div>
+<p class="role-desc">Registers for tracks, enrolls in events, submits solutions, and tracks their progress through the platform.</p>
+<ul class="role-list">
+<li>Register for learning tracks</li>
+<li>Enroll in events and hackathons</li>
+<li>Submit solutions to challenges</li>
+<li>Track progress and scores</li>
+<li>Join or create teams</li>
+</ul>
+<div class="role-portal">Track Browser &rarr; Module Viewer &rarr; Exercise Workspace &rarr; Progress Dashboard</div>
+</div>
+<div class="role-card amber">
+<span class="role-icon">&#9673;</span>
+<div class="role-name">Org Admin</div>
+<p class="role-desc">Manages the organisation, creates events and challenges, configures scoring, and views platform-wide analytics.</p>
+<ul class="role-list">
+<li>Manage organisation and members</li>
+<li>Create events and challenges</li>
+<li>Configure scoring methods</li>
+<li>Oversee team activity</li>
+<li>Access platform analytics</li>
+</ul>
+<div class="role-portal">Event Builder &rarr; Track &amp; Module Builder &rarr; Org Management &rarr; Analytics</div>
+</div>
+<div class="role-card violet">
+<span class="role-icon">&#9678;</span>
+<div class="role-name">Judge / Evaluator</div>
+<p class="role-desc">Receives judge assignments for events, reviews submissions, and enters scores and feedback per challenge.</p>
+<ul class="role-list">
+<li>Receive and manage judge assignments</li>
+<li>Review submission queue per challenge</li>
+<li>Enter scores from 0&ndash;100</li>
+<li>Provide structured feedback</li>
+<li>Mark submissions as evaluated</li>
+</ul>
+<div class="role-portal">Judging Panel &rarr; Submission Queue &rarr; Score Entry &rarr; Feedback</div>
+</div>
+<div class="role-card gp">
+<span class="role-icon">&#9635;</span>
+<div class="role-name">Team Captain</div>
+<p class="role-desc">Creates or joins teams, manages team membership, and coordinates team-based submissions for hackathons.</p>
+<ul class="role-list">
+<li>Create and name a team</li>
+<li>Invite and remove members</li>
+<li>Assign the captain role</li>
+<li>Coordinate submissions</li>
+<li>Manage event participation</li>
+</ul>
+<div class="role-portal">Team Manager &rarr; Member Management &rarr; Event Coordination</div>
+</div>
+</div>
+</div>
+</section>
+
+<hr class="rule">
+
+<section id="v-workflows" class="section">
+<div class="container">
+<div class="workflows-header reveal">
+<div class="label" style="margin-bottom:24px">How It Works</div>
+<div class="display">FROM<br>CREATION<br>TO<br>RESULTS.</div>
+</div>
+<div class="fw-grid reveal">
+<div class="fw-node">
+<div class="fw-num">01</div>
+<div class="fw-body">
+<div class="fw-title">Event Creation</div>
+<p class="fw-desc">Admin creates an event in DRAFT state. Configures challenges — setting types, scoring criteria, and datasets for Analytical challenges — then adds learning tracks if training is included. Publishes when the event is ready for registration.</p>
+</div>
+</div>
+<div class="fw-node">
+<div class="fw-num">02</div>
+<div class="fw-body">
+<div class="fw-title">Registration</div>
+<p class="fw-desc">Participants discover PUBLISHED events in the Event Catalog, enroll to create an enrollment record, and optionally join an existing team or create a new one with a nominated captain before the event goes ACTIVE.</p>
+</div>
+</div>
+<div class="fw-node">
+<div class="fw-num">03</div>
+<div class="fw-body">
+<div class="fw-title">Training</div>
+<p class="fw-desc">Participants progress through modules, engage with content — text, video, interactive — and complete exercises of quiz, coding, or analysis types. Completions are tracked automatically and contribute to overall track progress.</p>
+</div>
+</div>
+<div class="fw-node">
+<div class="fw-num">04</div>
+<div class="fw-body">
+<div class="fw-title">Competition</div>
+<p class="fw-desc">During ACTIVE hackathon events, participants submit solutions to challenges via the Submission Portal. Analytical challenges accept dataset results; Non-analytical challenges accept documents and presentations for manual review.</p>
+</div>
+</div>
+<div class="fw-node">
+<div class="fw-num">05</div>
+<div class="fw-body">
+<div class="fw-title">Evaluation</div>
+<p class="fw-desc">Judges assigned to challenges review the submission queue in the Judging Panel. They enter scores from 0 to 100 and optional written feedback. Each submission moves from PENDING to EVALUATED upon scoring.</p>
+</div>
+</div>
+<div class="fw-node">
+<div class="fw-num">06</div>
+<div class="fw-body">
+<div class="fw-title">Results</div>
+<p class="fw-desc">Live leaderboards automatically reflect scores as submissions are evaluated. Rankings visible by individual and by team. Once all challenges are scored, the event moves to COMPLETED and results are finalised.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<hr class="rule">
+
+<section id="v-training-portal" class="section">
+<div class="container">
+<div class="label reveal" style="margin-bottom:24px">Training Portal</div>
+<div class="display reveal" style="margin-bottom:72px">STRUCTURED<br>LEARNING<br>AT SCALE.</div>
+<div class="tp-grid reveal">
+<div class="tp-left">
+<p class="tp-desc">The Training Portal is the learner-facing Workshop application for structured skill development. Built on Palantir Workshop, it presents learning tracks as progression paths — from beginner to advanced — with content loaded from Foundry datasets via contentRef. Every completion is modelled as an Ontology action, creating a persistent, queryable competency record that administrators can analyse in real time through Contour.</p>
+<div class="tp-aside">
+<div class="tp-aside-title">Content Types Supported</div>
+<div class="content-types">
+<span class="ct-tag">Text</span>
+<span class="ct-tag">PDF</span>
+<span class="ct-tag">Video</span>
+<span class="ct-tag">Code</span>
+</div>
+</div>
+</div>
+<div class="tp-right">
+<div class="screen-list">
+<div class="screen-card">
+<div class="screen-badge">Workshop</div>
+<div class="screen-name">Track Browser</div>
+<p class="screen-desc">Browse and register for available learning tracks, filtered by difficulty level and estimated hours. Preview track structure before committing.</p>
+</div>
+<div class="screen-card">
+<div class="screen-badge">Workshop</div>
+<div class="screen-name">Module Viewer</div>
+<p class="screen-desc">View training content within a module — text, video, interactive material. Content loaded dynamically from contentRef stored in Foundry datasets.</p>
+</div>
+<div class="screen-card">
+<div class="screen-badge">Workshop</div>
+<div class="screen-name">Exercise Workspace</div>
+<p class="screen-desc">Complete exercises tied to modules: quiz, coding, or analysis types. Auto-scored where possible, with manual scoring for open-ended submissions.</p>
+</div>
+<div class="screen-card">
+<div class="screen-badge">Workshop</div>
+<div class="screen-name">My Progress Dashboard</div>
+<p class="screen-desc">Track module completion, exercise scores, and overall track progress in one view. See what remains and what has been achieved.</p>
+</div>
+<div class="screen-card amber">
+<div class="screen-badge amber">Contour</div>
+<div class="screen-name">Training Analytics</div>
+<p class="screen-desc">Org-level analytics for administrators — completion rates, average scores, popular tracks, and practitioner performance over time.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<hr class="rule">
+
+<section id="v-event-hub" class="section">
+<div class="container">
+<div class="eh-header reveal">
+<div class="label amber" style="margin-bottom:24px">Event &amp; Hackathon Hub</div>
+<div class="display">COMPETE.<br>BUILD.<br>WIN.</div>
+</div>
+<div class="challenge-types reveal">
+<div class="ct-card anal">
+<div class="ct-card-title">Analytical Challenge</div>
+<p class="ct-card-desc">Participants download a structured dataset and submit their results file. Scored automatically against expected outputs. Ideal for data science, modelling, and Foundry pipeline challenges where correctness can be computed precisely.</p>
+</div>
+<div class="ct-card nonanal">
+<div class="ct-card-title">Non-Analytical Challenge</div>
+<p class="ct-card-desc">Participants submit documents, presentations, or written deliverables for manual review by assigned judges. Ideal for design challenges, strategic proposals, architecture reviews, and qualitative assessments requiring human judgement.</p>
+</div>
+</div>
+<div class="screens-grid reveal">
+<div class="screen-card amber">
+<div class="screen-badge amber">Workshop</div>
+<div class="screen-name">Event Catalog</div>
+<p class="screen-desc">Discover upcoming and active events. View event details, challenge listings, and enroll directly. Filter by type and organising institution.</p>
+</div>
+<div class="screen-card amber">
+<div class="screen-badge amber">Workshop</div>
+<div class="screen-name">Challenge Board</div>
+<p class="screen-desc">View all challenges within an event, download datasets for Analytical challenges, and understand scoring criteria and submission requirements.</p>
+</div>
+<div class="screen-card amber">
+<div class="screen-badge amber">Workshop</div>
+<div class="screen-name">Submission Portal</div>
+<p class="screen-desc">Upload solution files for challenges. Track submission status from PENDING through to EVALUATED. View judge feedback when available.</p>
+</div>
+<div class="screen-card amber">
+<div class="screen-badge amber">Workshop</div>
+<div class="screen-name">Team Manager</div>
+<p class="screen-desc">Create or join teams for team-based events. Assign a team captain, manage membership, and coordinate participation across challenges.</p>
+</div>
+<div class="screen-card amber">
+<div class="screen-badge amber">Workshop</div>
+<div class="screen-name">Live Leaderboard</div>
+<p class="screen-desc">Real-time rankings by individual participant and by team. Score breakdowns per challenge visible as judging progresses.</p>
+</div>
+<div class="screen-card amber">
+<div class="screen-badge amber">Workshop</div>
+<div class="screen-name">Judging Panel</div>
+<p class="screen-desc">Judge-facing interface for reviewing submission queues per challenge. Enter scores from 0&ndash;100 and structured feedback. Submissions move to EVALUATED on save.</p>
+</div>
+</div>
+</div>
+</section>
+
+<hr class="rule">
+
+<section id="v-admin" class="section" style="background:var(--off)">
+<div class="container">
+<div class="reveal">
+<div class="label violet" style="margin-bottom:24px">Admin Console</div>
+<div class="display">FULL<br>PLATFORM<br>CONTROL.</div>
+</div>
+<div class="admin-grid reveal">
+<div class="screen-card violet">
+<div class="screen-badge violet">Workshop</div>
+<div class="screen-name">Organisation Management</div>
+<p class="screen-desc">Create and edit organisations, manage member rosters, and assign roles — Learner, Admin, Judge — across the platform. Control access at the org level.</p>
+</div>
+<div class="screen-card violet">
+<div class="screen-badge violet">Workshop</div>
+<div class="screen-name">Event Builder</div>
+<p class="screen-desc">Create events from scratch. Set registration and event dates, define challenges, configure scoring methods per challenge, and publish when ready.</p>
+</div>
+<div class="screen-card violet">
+<div class="screen-badge violet">Workshop</div>
+<div class="screen-name">Track &amp; Module Builder</div>
+<p class="screen-desc">Design learning tracks with ordered modules. Add content via contentRef, set difficulty and estimated hours, and create exercises for each module.</p>
+</div>
+<div class="screen-card violet">
+<div class="screen-badge violet">Contour</div>
+<div class="screen-name">Platform Analytics Dashboard</div>
+<p class="screen-desc">Cross-organisation metrics: total users, events created, submissions received, leaderboard trends, track completion rates, and practitioner growth over time.</p>
+</div>
+<div class="screen-card violet">
+<div class="screen-badge violet">Workshop</div>
+<div class="screen-name">Notification System</div>
+<p class="screen-desc">Automated alerts for event reminders, submission scored notifications, team membership changes, and registration confirmations sent to participants.</p>
+</div>
+<div class="screen-card violet">
+<div class="screen-badge violet">Checkpoint</div>
+<div class="screen-name">Audit &amp; Compliance</div>
+<p class="screen-desc">Track every platform action: enrolments, submissions, scores entered, team changes. Full audit trail for compliance and governance requirements.</p>
+</div>
+</div>
+</div>
+</section>
+
+<hr class="rule">
+
+<section id="v-live-events" class="section">
+<div class="container">
+<div class="reveal">
+<div class="label" style="margin-bottom:24px">Live Platform Data</div>
+<div class="display">ACTIVE<br>EVENTS ON<br>FOUNDRY.</div>
+</div>
+<div id="events-grid" style="margin-top:56px">
+<div class="skel-card skel"></div>
+<div class="skel-card skel"></div>
+<div class="skel-card skel"></div>
+</div>
+<div class="state-msg" id="events-error">Unable to connect to the Foundry backend. Live event data is not available in this environment.</div>
+<div class="state-msg" id="events-empty">No events are currently published or active on the platform.</div>
+</div>
+</section>
+
+<hr class="rule">
+
+<section id="v-live-leaderboard" class="section" style="background:var(--off)">
+<div class="container">
+<div class="reveal">
+<div class="label amber" style="margin-bottom:24px">Live Leaderboard</div>
+<div class="display">TOP<br>SCORES.<br>LIVE.</div>
+</div>
+<div class="lb-controls reveal">
+<select id="event-select">
+<option value="">All Events</option>
+</select>
+</div>
+<div class="lb-table-wrap reveal">
+<table id="lb-table">
+<thead>
+<tr>
+<th>Rank</th>
+<th>Participant</th>
+<th>Team</th>
+<th>Event</th>
+<th>Score</th>
+<th>Submissions</th>
+</tr>
+</thead>
+<tbody id="lb-body"></tbody>
+</table>
+<div class="state-msg" id="lb-error">Unable to load leaderboard data. Backend connection not available.</div>
+<div class="state-msg" id="lb-empty">No scored submissions yet. Leaderboard will populate as judges evaluate entries.</div>
+</div>
+</div>
+</section>
+
+<hr class="rule">
+
+<section id="v-live-tracks" class="section">
+<div class="container">
+<div class="reveal">
+<div class="label" style="margin-bottom:24px">Available Now</div>
+<div class="display">TRAINING<br>TRACKS ON<br>VANYAR.</div>
+</div>
+<div id="tracks-grid" style="margin-top:56px">
+<div class="skel-card skel"></div>
+<div class="skel-card skel"></div>
+<div class="skel-card skel"></div>
+</div>
+<div class="state-msg" id="tracks-error">Unable to load training tracks. Backend connection not available.</div>
+<div class="state-msg" id="tracks-empty">No training tracks have been published yet. Check back soon.</div>
+</div>
+</section>
+
+<hr class="rule">
+
+<section id="v-what" class="section" style="background:var(--off)">
+<div class="container">
+<div class="reveal">
+<div class="label" style="margin-bottom:24px">What is Vanyar</div>
+<div class="display">NOT AN LMS<br>WITH A<br><span class="dim">Palantir skin.</span></div>
+</div>
+<div class="what-grid reveal" style="margin-top:64px">
+<div class="what-copy">
+<p>Generic learning management systems were built for generic organisations. They track completions. They report on clicks. They generate PDFs. What they cannot do — and were never designed to do — is model competency as a living, queryable object inside the same operational infrastructure where your teams actually work.</p>
+<p>Vanyar is built natively on Palantir Foundry. Training progress is modelled as an Ontology. Actions are Foundry Actions. Analytics run in Contour and Workshop. The same infrastructure that powers your AIP deployments is the infrastructure that tracks whether your team can build on it.</p>
+<div class="principle-box">
+<p>"A training platform that cannot tell you the exact competency profile of every practitioner on your bench — in real time — is not a training platform. It is a content library with an invoice."</p>
+</div>
+</div>
+<div class="diff-grid">
+<div class="diff-row">
+<div class="diff-header bad">Generic LMS</div>
+<div class="diff-header good">Vanyar</div>
+</div>
+<div class="diff-row">
+<div class="diff-cell bad">Platform-agnostic content library</div>
+<div class="diff-cell good">Foundry and AIP native learning paths</div>
+</div>
+<div class="diff-row">
+<div class="diff-cell bad">Static completion records</div>
+<div class="diff-cell good">Live Ontology-modelled progress</div>
+</div>
+<div class="diff-row">
+<div class="diff-cell bad">No competency benchmarking</div>
+<div class="diff-cell good">Real-time competency analytics</div>
+</div>
+<div class="diff-row">
+<div class="diff-cell bad">Disconnected from your stack</div>
+<div class="diff-cell good">Built on the same infrastructure</div>
+</div>
+<div class="diff-row">
+<div class="diff-cell bad">No ecosystem signal</div>
+<div class="diff-cell good">FuturOps community signal feeds in</div>
+</div>
+<div class="diff-row">
+<div class="diff-cell bad">Vendor-curated curriculum</div>
+<div class="diff-cell good">Practitioner-authored curriculum</div>
+</div>
+<div class="diff-row">
+<div class="diff-cell bad">Bolt-on hackathon tools</div>
+<div class="diff-cell good">Integrated hackathon and scoring engine</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="v-statements" class="section-sm">
+<div class="container">
+<div class="stmt-list">
+<div class="stmt">THE PLATFORM IS FOUNDRY.</div>
+<div class="stmt">THE DATA IS YOUR DATA.</div>
+<div class="stmt">COMPETENCY MUST COMPOUND.</div>
+<div class="stmt">TRAINING IS INFRASTRUCTURE.</div>
+<div class="stmt">WE BUILD FOR THOSE WHO SHIP.</div>
+</div>
+</div>
+</section>
+
+<hr class="rule">
+
+<section id="v-ontology" class="section">
+<div class="container">
+<div class="ont-header reveal">
+<div class="label" style="margin-bottom:24px">Architecture</div>
+<div class="display">14 OBJECT<br>TYPES. ONE<br>ONTOLOGY.</div>
+</div>
+<div class="ont-layout reveal">
+<div class="ont-desc">
+<p>Vanyar is modelled on the Aavya Ontology — a Palantir Foundry ontology on branch km/vanyar-ontology-setup at aavya.palantirfoundry.com. Every platform concept — users, organisations, events, challenges, submissions, scores, tracks, modules — exists as a typed object with defined properties and linked relationships across 22 link types.</p>
+<p>The Ontology drives everything: Workshop applications read and write through it, Actions validate against it, Contour analytics query it, and Checkpoint audits it. This is not a database with a UI on top. It is a living operational model of your training and competition ecosystem.</p>
+<div class="ont-meta">
+<div class="ont-meta-item">
+<div class="ont-meta-num">14</div>
+<div class="ont-meta-lbl">Object Types</div>
+</div>
+<div class="ont-meta-item">
+<div class="ont-meta-num">22</div>
+<div class="ont-meta-lbl">Link Types</div>
+</div>
+<div class="ont-meta-item">
+<div class="ont-meta-num">8</div>
+<div class="ont-meta-lbl">Action Types</div>
+</div>
+<div class="ont-meta-item">
+<div class="ont-meta-num">13</div>
+<div class="ont-meta-lbl">Pipeline Transforms</div>
+</div>
+</div>
+</div>
+<div class="stack-layers">
+<div class="stack-layer app">
+<div class="stack-layer-label">Application Layer</div>
+<div class="stack-layer-desc">Workshop applications for 4 user roles, Contour analytics dashboards, Checkpoint audit and compliance</div>
+</div>
+<div class="stack-layer logic">
+<div class="stack-layer-label">Logic Layer</div>
+<div class="stack-layer-desc">8 Action Types with function-backed validations, OSDK integration for external access, notification side-effects</div>
+</div>
+<div class="stack-layer ontology">
+<div class="stack-layer-label">Ontology Layer</div>
+<div class="stack-layer-desc">14 Object Types, 22 Link Types on Aavya Ontology — ri.ontology.main.ontology.2b524aaa-b15b-49c6-9b69-353f71badbaf</div>
+</div>
+<div class="stack-layer data">
+<div class="stack-layer-label">Data Layer</div>
+<div class="stack-layer-desc">13 raw datasets, 13 Pipeline Builder transforms, 13 clean datasets feeding the Ontology</div>
+</div>
+</div>
+</div>
+<div class="obj-grid reveal">
+<div class="obj-card">
+<span class="obj-icon">&#9672;</span>
+<div class="obj-name">User</div>
+<div class="obj-pk">PK: userId</div>
+<div class="obj-props">name, email, role, organisationId, createdAt</div>
+</div>
+<div class="obj-card">
+<span class="obj-icon">&#9672;</span>
+<div class="obj-name">Organisation</div>
+<div class="obj-pk">PK: organisationId</div>
+<div class="obj-props">name, type, adminUserId, createdAt</div>
+</div>
+<div class="obj-card">
+<span class="obj-icon">&#9672;</span>
+<div class="obj-name">Event</div>
+<div class="obj-pk">PK: eventId</div>
+<div class="obj-props">name, type, status, startDate, endDate, organisationId</div>
+</div>
+<div class="obj-card">
+<span class="obj-icon">&#9672;</span>
+<div class="obj-name">Challenge</div>
+<div class="obj-pk">PK: challengeId</div>
+<div class="obj-props">eventId, type, title, description, datasetRef, maxScore</div>
+</div>
+<div class="obj-card">
+<span class="obj-icon">&#9672;</span>
+<div class="obj-name">Submission</div>
+<div class="obj-pk">PK: submissionId</div>
+<div class="obj-props">userId, challengeId, fileRef, status, submittedAt</div>
+</div>
+<div class="obj-card">
+<span class="obj-icon">&#9672;</span>
+<div class="obj-name">Score</div>
+<div class="obj-pk">PK: scoreId</div>
+<div class="obj-props">submissionId, judgeId, score, feedback, scoredAt</div>
+</div>
+<div class="obj-card">
+<span class="obj-icon">&#9672;</span>
+<div class="obj-name">Enrollment</div>
+<div class="obj-pk">PK: enrollmentId</div>
+<div class="obj-props">userId, eventId, teamId, enrolledAt</div>
+</div>
+<div class="obj-card">
+<span class="obj-icon">&#9672;</span>
+<div class="obj-name">Team</div>
+<div class="obj-pk">PK: teamId</div>
+<div class="obj-props">name, eventId, captainUserId, memberUserIds</div>
+</div>
+<div class="obj-card">
+<span class="obj-icon">&#9672;</span>
+<div class="obj-name">Track</div>
+<div class="obj-pk">PK: trackId</div>
+<div class="obj-props">name, difficulty, estimatedHours, organisationId</div>
+</div>
+<div class="obj-card">
+<span class="obj-icon">&#9672;</span>
+<div class="obj-name">Module</div>
+<div class="obj-pk">PK: moduleId</div>
+<div class="obj-props">trackId, title, contentRef, orderIndex, moduleType</div>
+</div>
+<div class="obj-card">
+<span class="obj-icon">&#9672;</span>
+<div class="obj-name">Exercise</div>
+<div class="obj-pk">PK: exerciseId</div>
+<div class="obj-props">moduleId, type, prompt, expectedAnswer, maxScore</div>
+</div>
+<div class="obj-card">
+<span class="obj-icon">&#9672;</span>
+<div class="obj-name">TrackEnrollment</div>
+<div class="obj-pk">PK: trackEnrollmentId</div>
+<div class="obj-props">userId, trackId, enrolledAt, completionStatus</div>
+</div>
+<div class="obj-card">
+<span class="obj-icon">&#9672;</span>
+<div class="obj-name">ModuleCompletion</div>
+<div class="obj-pk">PK: completionId</div>
+<div class="obj-props">userId, moduleId, completedAt, score</div>
+</div>
+<div class="obj-card">
+<span class="obj-icon">&#9672;</span>
+<div class="obj-name">JudgeAssignment</div>
+<div class="obj-pk">PK: assignmentId</div>
+<div class="obj-props">judgeUserId, challengeId, eventId, assignedAt</div>
+</div>
+</div>
+</div>
+</section>
+
+<hr class="rule">
+
+<section id="v-status" class="section" style="background:var(--off)">
+<div class="container">
+<div class="reveal">
+<div class="label amber" style="margin-bottom:24px">Build Status</div>
+<div class="display">CURRENT<br>PLATFORM<br>STATE.</div>
+</div>
+<div class="status-layout reveal">
+<div class="status-desc">
+<p>Vanyar is in active development on the Aavya Foundry environment. The data foundation and Ontology are complete. Workshop applications for all four user roles are being built. Function-backed validations and OSDK integrations are next in the queue.</p>
+<p>The platform is on track for early access with design partners as Workshop applications reach feature-complete state. Leaderboard automation and notification pipelines follow in the next build cycle.</p>
+</div>
+<div class="status-list">
+<div class="status-item">
+<span class="status-badge complete">Complete</span>
+<span class="status-text">13 raw datasets ingested and validated</span>
+</div>
+<div class="status-item">
+<span class="status-badge complete">Complete</span>
+<span class="status-text">13 Pipeline Builder transforms operational</span>
+</div>
+<div class="status-item">
+<span class="status-badge complete">Complete</span>
+<span class="status-text">13 clean datasets feeding the Ontology</span>
+</div>
+<div class="status-item">
+<span class="status-badge complete">Complete</span>
+<span class="status-text">14 Object Types defined and linked</span>
+</div>
+<div class="status-item">
+<span class="status-badge complete">Complete</span>
+<span class="status-text">22 Link Types established across the Ontology</span>
+</div>
+<div class="status-item">
+<span class="status-badge complete">Complete</span>
+<span class="status-text">8 Action Types configured</span>
+</div>
+<div class="status-item">
+<span class="status-badge progress">In Progress</span>
+<span class="status-text">Workshop applications for all 4 user roles</span>
+</div>
+<div class="status-item">
+<span class="status-badge progress">In Progress</span>
+<span class="status-text">Function-backed action validations</span>
+</div>
+<div class="status-item">
+<span class="status-badge progress">In Progress</span>
+<span class="status-text">OSDK integration for external access</span>
+</div>
+<div class="status-item">
+<span class="status-badge planned">Planned</span>
+<span class="status-text">Leaderboard pipeline automation</span>
+</div>
+<div class="status-item">
+<span class="status-badge planned">Planned</span>
+<span class="status-text">Pipeline refresh schedules</span>
+</div>
+<div class="status-item">
+<span class="status-badge planned">Planned</span>
+<span class="status-text">Notification side-effects and alert system</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<hr class="rule">
+
+<section id="v-partner" class="section">
+<div class="container">
+<div class="reveal">
+<div class="label" style="margin-bottom:24px">Design Partner Programme</div>
+<div class="display">SHAPE THE<br><span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(44px,6vw,96px);line-height:.9;display:block;margin:.1em 0">platform</span>WITH US.</div>
+</div>
+<div class="partner-layout reveal">
+<div class="partner-left">
+<div class="partner-desc">
+<p>Vanyar is opening a limited design partner cohort. Design partners get direct input into what gets built, how it works, and where the platform goes next — in exchange for real-world usage, feedback, and early deployment.</p>
+<p>This is not a beta programme. Design partners shape the roadmap. If you are running training programmes or hackathons in the Palantir ecosystem, this is for you.</p>
+</div>
+<div class="benefit-rows">
+<div class="benefit-row">
+<div class="benefit-num">01</div>
+<div>
+<div class="benefit-title">Roadmap Influence</div>
+<p class="benefit-text">Your use cases directly shape feature prioritisation. Monthly sessions with the Gwaith Labs product team.</p>
+</div>
+</div>
+<div class="benefit-row">
+<div class="benefit-num">02</div>
+<div>
+<div class="benefit-title">Early Access</div>
+<p class="benefit-text">Access to Workshop applications and new features before general availability. First to run live events on the platform.</p>
+</div>
+</div>
+<div class="benefit-row">
+<div class="benefit-num">03</div>
+<div>
+<div class="benefit-title">Preferential Terms</div>
+<p class="benefit-text">Design partners receive preferential commercial terms when the platform moves to general availability.</p>
+</div>
+</div>
+<div class="benefit-row">
+<div class="benefit-num">04</div>
+<div>
+<div class="benefit-title">Ecosystem Visibility</div>
+<p class="benefit-text">Design partners are recognised in the Vanyar community and FuturOps network as founding organisations.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="partner-right">
+<div class="partner-box">
+<div class="partner-box-title">BECOME A DESIGN PARTNER</div>
+<div class="partner-who">
+<div class="partner-who-label">We are looking for</div>
+<ul>
+<li>Enterprise organisations running internal Palantir training</li>
+<li>Service partners delivering client enablement programmes</li>
+<li>Universities running Palantir competitions or courses</li>
+<li>Ecosystem organisations planning hackathons</li>
+</ul>
+</div>
+<div class="partner-ctas">
+<a href="mailto:mithilesh.nayak@gmail.com?subject=Vanyar Design Partner Enquiry" class="btn btn-fill-copper">Enquire via email &rarr;</a>
+<a href="mailto:mithilesh.nayak@gmail.com?subject=Vanyar Design Partner - University" class="btn btn-ghost">University or developer programme</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<footer>
+<div class="footer-inner">
+<div class="footer-brand">
+<div class="wordmark">VANYAR</div>
+<div class="footer-tagline">Intelligence That Teaches Itself Forward.</div>
+<div class="footer-sub">A Gwaith Labs product</div>
+</div>
+<nav class="footer-nav">
+<a href="#v-pillars">Platform</a>
+<a href="#v-roles">Roles</a>
+<a href="#v-event-hub">Events</a>
+<a href="#v-training-portal">Training</a>
+<a href="#v-ontology">Architecture</a>
+<a href="#v-partner">Partners</a>
+</nav>
+<div class="footer-right">
+<div class="footer-copy">
+&copy; 2026 Gwaith Labs. All rights reserved.<br>
+Built on Palantir Foundry.<br>
+aavya.palantirfoundry.com
+</div>
+</div>
+</div>
+</footer>
+
+<script>
+const API='http://localhost:3001/api';
+
+function toggleMenu(){
+document.getElementById('mobile-menu').classList.toggle('open');
+}
+function closeMenu(){
+document.getElementById('mobile-menu').classList.remove('open');
+}
+
+const nav=document.getElementById('main-nav');
+window.addEventListener('scroll',function(){
+if(window.scrollY>40){nav.classList.add('scrolled')}else{nav.classList.remove('scrolled')}
+});
+
+const revealObs=new IntersectionObserver(function(entries){
+entries.forEach(function(e){
+if(e.isIntersecting){e.target.classList.add('visible')}
+});
+},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
+
+document.querySelectorAll('.reveal').forEach(function(el){revealObs.observe(el)});
+
+const stmtObs=new IntersectionObserver(function(entries){
+entries.forEach(function(e){
+if(e.isIntersecting){e.target.classList.add('lit')}else{e.target.classList.remove('lit')}
+});
+},{threshold:0.5});
+
+document.querySelectorAll('.stmt').forEach(function(el){
+stmtObs.observe(el);
+el.addEventListener('mouseenter',function(){el.classList.add('lit')});
+el.addEventListener('mouseleave',function(){el.classList.remove('lit')});
+});
+
+const flowObs=new IntersectionObserver(function(entries){
+entries.forEach(function(e){
+if(e.isIntersecting){e.target.classList.add('visible')}
+});
+},{threshold:0.1});
+
+document.querySelectorAll('.fw-node').forEach(function(el){flowObs.observe(el)});
+
+async function apiFetch(path){
+const res=await fetch(API+path);
+if(!res.ok)throw new Error('HTTP '+res.status);
+return res.json();
+}
+
+function animateCount(el,target){
+el.classList.remove('stat-pulse');
+const duration=1400;
+const start=performance.now();
+function step(ts){
+const p=Math.min((ts-start)/duration,1);
+const ease=1-Math.pow(1-p,3);
+el.textContent=Math.round(ease*target).toLocaleString();
+if(p<1)requestAnimationFrame(step);
+}
+requestAnimationFrame(step);
+}
+
+function fmtDate(d){
+if(!d)return'—';
+try{return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}
+catch(e){return d}
+}
+
+async function loadStats(){
+try{
+const data=await apiFetch('/stats');
+if(data.users!=null)animateCount(document.getElementById('stat-users'),data.users);
+if(data.events!=null)animateCount(document.getElementById('stat-events'),data.events);
+if(data.tracks!=null)animateCount(document.getElementById('stat-tracks'),data.tracks);
+if(data.submissions!=null)animateCount(document.getElementById('stat-submissions'),data.submissions);
+}catch(e){
+['stat-users','stat-events','stat-tracks','stat-submissions'].forEach(function(id){
+var el=document.getElementById(id);
+if(el){el.textContent='—'}
+});
+}
+}
+
+function buildEventCard(ev){
+var type=(ev.type||'').toUpperCase();
+var status=(ev.status||'').toLowerCase();
+var colorClass=type==='TRAINING'?'copper':'amber';
+var statusLabel=status==='published'?'Published':status==='active'?'Active':status==='completed'?'Completed':status;
+var desc=ev.description?ev.description.substring(0,120)+(ev.description.length>120?'...':''):'';
+return '<div class="event-card '+colorClass+'">'
++'<span class="event-status '+status+'">'+statusLabel+'</span>'
++'<div class="event-name">'+(ev.name||'Untitled Event')+'</div>'
++'<div class="event-meta">'+type+' / '+fmtDate(ev.startDate)+' &ndash; '+fmtDate(ev.endDate)+'</div>'
++(desc?'<p class="event-desc">'+desc+'</p>':'')
++'</div>';
+}
+
+async function loadEvents(){
+var grid=document.getElementById('events-grid');
+var errEl=document.getElementById('events-error');
+var emptyEl=document.getElementById('events-empty');
+try{
+var data=await apiFetch('/events?status=PUBLISHED,ACTIVE,COMPLETED');
+var events=Array.isArray(data)?data:(data.events||[]);
+grid.innerHTML='';
+if(!events.length){emptyEl.classList.add('show');return}
+grid.innerHTML=events.map(buildEventCard).join('');
+var sel=document.getElementById('event-select');
+events.forEach(function(ev){
+var opt=document.createElement('option');
+opt.value=ev.eventId||ev.id||'';
+opt.textContent=ev.name||'Event';
+sel.appendChild(opt);
+});
+}catch(e){
+grid.innerHTML='';
+errEl.classList.add('show');
+}
+}
+
+function buildLbRow(entry,rank){
+var rankClass=rank===1?'lb-gold':rank===2?'lb-silver':rank===3?'lb-bronze':'';
+return '<tr class="'+rankClass+'">'
++'<td class="lb-rank">'+rank+'</td>'
++'<td>'+(entry.participantName||entry.userName||entry.name||'—')+'</td>'
++'<td>'+(entry.teamName||'—')+'</td>'
++'<td>'+(entry.eventName||'—')+'</td>'
++'<td>'+(entry.totalScore!=null?entry.totalScore:entry.score!=null?entry.score:'—')+'</td>'
++'<td>'+(entry.submissionCount!=null?entry.submissionCount:'—')+'</td>'
++'</tr>';
+}
+
+async function loadLeaderboard(eventId){
+var body=document.getElementById('lb-body');
+var errEl=document.getElementById('lb-error');
+var emptyEl=document.getElementById('lb-empty');
+errEl.classList.remove('show');
+emptyEl.classList.remove('show');
+body.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--gm);padding:28px;font-size:11px">Loading...</td></tr>';
+try{
+var path=eventId?'/events/'+eventId+'/leaderboard':'/leaderboard';
+var data=await apiFetch(path);
+var rows=Array.isArray(data)?data:(data.leaderboard||data.entries||[]);
+if(!rows.length){body.innerHTML='';emptyEl.classList.add('show');return}
+body.innerHTML=rows.map(function(r,i){return buildLbRow(r,i+1)}).join('');
+}catch(e){
+body.innerHTML='';
+errEl.classList.add('show');
+}
+}
+
+function buildTrackCard(track){
+var diff=(track.difficulty||'BEGINNER').toUpperCase();
+var cls=diff==='BEGINNER'?'beginner':diff==='INTERMEDIATE'?'intermediate':'advanced';
+var desc=track.description?track.description.substring(0,110)+(track.description.length>110?'...':''):'';
+return '<div class="track-card '+cls+'">'
++'<span class="track-diff '+cls+'">'+diff+'</span>'
++'<div class="track-name">'+(track.name||'Untitled Track')+'</div>'
++(desc?'<p class="track-desc">'+desc+'</p>':'')
++'<div class="track-meta">'
++(track.estimatedHours!=null?'<span>'+track.estimatedHours+'h estimated</span>':'')
++(track.moduleCount!=null?'<span>'+track.moduleCount+' modules</span>':'')
++'</div>'
++'</div>';
+}
+
+async function loadTracks(){
+var grid=document.getElementById('tracks-grid');
+var errEl=document.getElementById('tracks-error');
+var emptyEl=document.getElementById('tracks-empty');
+try{
+var data=await apiFetch('/tracks');
+var tracks=Array.isArray(data)?data:(data.tracks||[]);
+grid.innerHTML='';
+if(!tracks.length){emptyEl.classList.add('show');return}
+grid.innerHTML=tracks.map(buildTrackCard).join('');
+}catch(e){
+grid.innerHTML='';
+errEl.classList.add('show');
+}
+}
+
+document.getElementById('event-select').addEventListener('change',function(){
+loadLeaderboard(this.value);
+});
+
+loadStats();
+loadEvents();
+loadLeaderboard('');
+loadTracks();
+</script>
+</body>
+</html>
