@@ -1,0 +1,9 @@
+{
+  "user@example.com": {
+    "userId": "usr_000000000000",
+    "email": "user@example.com",
+    "hash": "$2b$10$REPLACE_WITH_BCRYPT_HASH_OF_PASSWORD",
+    "name": "Example User",
+    "role": "participant"
+  }
+}
