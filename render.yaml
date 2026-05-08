@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: vanyar-backend
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FOUNDRY_URL
+        sync: false
+      - key: CLIENT_ID
+        sync: false
+      - key: CLIENT_SECRET
+        sync: false
+      - key: ONTOLOGY_RID
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false

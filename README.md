@@ -128,6 +128,35 @@ This is a working demo of the Vanyar MVP brief. Known gaps include:
 
 See `VANYAR_PLATFORM_GUIDE.md` for the full feature inventory and post-POC roadmap.
 
+## Deployment
+
+The repo is set up for free hosting:
+
+- **Frontend → GitHub Pages** via `.github/workflows/deploy-pages.yml` (runs on every push to `main`).
+- **Backend → Render.com** via `render.yaml` (Blueprint).
+
+### Backend on Render
+
+1. Sign in at <https://render.com> with GitHub.
+2. **New → Blueprint** → pick this repo. Render reads `render.yaml` and provisions the service.
+3. In the new service's Environment tab, fill in:
+   - `FOUNDRY_URL` — e.g. `https://aavya.palantirfoundry.com`
+   - `CLIENT_ID`, `CLIENT_SECRET` — from the Foundry Developer Console
+   - `ONTOLOGY_RID` — from the platform guide
+   - `CORS_ORIGINS` — `https://<your-github-username>.github.io`
+4. Wait for the first deploy. Note the public URL (e.g. `https://vanyar-backend.onrender.com`).
+5. Hit `<URL>/api/health` to confirm it's live.
+
+> Free Render services spin down after ~15 min idle and take ~50s to wake up. Acceptable for a demo, not production.
+
+### Frontend on GitHub Pages
+
+1. Settings → Pages → Source: **GitHub Actions**.
+2. Settings → Secrets and variables → Actions → **Variables** → New repo variable:
+   - `BACKEND_URL` = `https://<your-render-app>.onrender.com/api`
+3. Push to `main` (or run the workflow manually). Pages will build with that backend URL baked in.
+4. Site will be live at `https://<your-github-username>.github.io/OSDK_V_DEMO/`.
+
 ## License
 
 TBD.
